@@ -24,6 +24,7 @@ import com.example.uasshakealarm.AppReceiver;
 import com.example.uasshakealarm.R;
 
 
+
 public class ShakeActivity extends AppCompatActivity implements SensorEventListener {
     private PendingIntent pendingIntent;
     private static final int ALARM_REQUEST_CODE = 134;

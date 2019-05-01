@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteStatement;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static int DATABASE_VERSION = 1;
     private static String DB_FILE_NAME = "concretepage";

@@ -22,6 +22,7 @@ import java.util.Date;
 import static android.content.Context.MODE_PRIVATE;
 
 
+
 public class AppReceiver extends BroadcastReceiver {
 
     private PendingIntent pendingIntent;
