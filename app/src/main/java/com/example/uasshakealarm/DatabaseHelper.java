@@ -11,6 +11,7 @@ import java.util.List;
 
 
 public class DatabaseHelper extends SQLiteOpenHelper {
+    private Integer id;
     private static int DATABASE_VERSION = 1;
     private static String DB_FILE_NAME = "concretepage";
     public DatabaseHelper(Context context) {
@@ -75,5 +76,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         stmt.execute();
         stmt.close();
         db.close();
+    }
+
+    public int getID(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT  *  FROM Alarm";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToLast()){
+            id = cursor.getInt(0);
+
+        }
+        cursor.close();
+        return id;
+
     }
 }

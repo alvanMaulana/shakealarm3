@@ -31,7 +31,7 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener{
     private PendingIntent pendingIntent;
-    private static final int ALARM_REQUEST_CODE = 134;
+    private static int ALARM_REQUEST_CODE = 101;
     //set interval notifikasi 10 detik
     private int interval_seconds = 10;
     private int NOTIFICATION_ID = 1;
@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
         setContentView(R.layout.activity_main);
 
         c = Calendar.getInstance();
+        final TextView abc = (TextView)findViewById(R.id.abc);
 
 
 
@@ -93,8 +94,12 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
             @Override
             public void onClick(View view) {
                 insertToSqlLite();
-                startAlarmManager(c);
-                startActivity(toLihat);
+
+                   int a = getID();
+                   ALARM_REQUEST_CODE = a;
+                   startAlarmManager(c);
+                   startActivity(toLihat);
+
 
             }
         });
@@ -113,7 +118,10 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
 
     }
 
-
+    private int getID() {
+        databaseHelper = new DatabaseHelper(this);
+        return databaseHelper.getID();
+    }
 
 
     @Override
