@@ -1,3 +1,3 @@
 # shakeAlarm
 
-asdfxghjkl
+semangat guys
