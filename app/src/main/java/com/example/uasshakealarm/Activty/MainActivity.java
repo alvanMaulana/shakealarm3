@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
             public void onClick(View view) {
                 insertToSqlLite();
 
+
                    int a = getID();
                    ALARM_REQUEST_CODE = a;
                    startAlarmManager(c);

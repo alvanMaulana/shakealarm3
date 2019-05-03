@@ -76,6 +76,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         stmt.execute();
         stmt.close();
         db.close();
+
     }
 
     public int getID(){
