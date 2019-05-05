@@ -50,15 +50,9 @@ public class AppReceiver extends BroadcastReceiver {
 
         //set waktu sekarang berdasarkan interval
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.HOUR_OF_DAY, interval_seconds);
+        cal.add(Calendar.SECOND, interval_seconds);
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         //set alarm manager dengan memasukkan waktu yang telah dikonversi menjadi milliseconds
-
-        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, pendingIntent);
-        playmusic(context);
-
-
 
 
         if (android.os.Build.VERSION.SDK_INT >= 23) {
