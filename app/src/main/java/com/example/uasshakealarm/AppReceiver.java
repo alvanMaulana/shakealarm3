@@ -54,15 +54,13 @@ public class AppReceiver extends BroadcastReceiver {
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         //set alarm manager dengan memasukkan waktu yang telah dikonversi menjadi milliseconds
 
-        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, pendingIntent);
-        playmusic(context);
 
-
-
-        if (android.os.Build.VERSION.SDK_INT >= 23) {
-            manager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
+                    AlarmManager.INTERVAL_DAY, pendingIntent);
             playmusic(context);
+//            manager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+//            playmusic(context);
 
 
 
