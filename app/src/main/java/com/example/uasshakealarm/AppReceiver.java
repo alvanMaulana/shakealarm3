@@ -26,7 +26,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class AppReceiver extends BroadcastReceiver {
 
     private PendingIntent pendingIntent;
-    private static final int ALARM_REQUEST_CODE = 134;
+    private static final int ALARM_REQUEST_CODE = 120;
     //set interval notifikasi 10 detik
     private int interval_seconds = 2;
     private NotificationManager alarmNotificationManager;
