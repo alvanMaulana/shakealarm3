@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -115,8 +117,6 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
 
             }
         });
-
-
     }
 
     private int getID() {
@@ -157,12 +157,14 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
 
     private void insertToSqlLite() {
         databaseHelper = new DatabaseHelper(this);
-        String jam = String.valueOf(c.get(Calendar.HOUR_OF_DAY));
-        String menit = String.valueOf(c.get(Calendar.MINUTE));
-        String semua = jam +":"+ menit;
+        int jam = (c.get(Calendar.HOUR_OF_DAY));
+        int menit = (c.get(Calendar.MINUTE));
+        int checked = 1;
         ModelAlarm alarm = new ModelAlarm();
 
-        alarm.setJam(semua);
+        alarm.setJam(jam);
+        alarm.setMenit(menit);
+        alarm.setChecked(checked);
 
         databaseHelper.insertData(alarm);
 

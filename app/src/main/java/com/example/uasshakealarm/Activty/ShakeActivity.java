@@ -86,7 +86,7 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
 
 
 
-    private void stopAlarmManager() {
+    public void stopAlarmManager() {
 
         Intent intent = new Intent(ShakeActivity.this,LihatAlarm.class);
 
@@ -134,11 +134,6 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
         float x = values[0];
         float y = values[1];
         float z = values[2];
-
-
-
-
-
 
         float accelationSquareRoot = (x * x + y * y + z * z)
                 / (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);

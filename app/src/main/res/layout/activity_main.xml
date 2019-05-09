@@ -9,6 +9,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/abc"
         android:paddingTop="20dp"
         android:layout_width="match_parent"
