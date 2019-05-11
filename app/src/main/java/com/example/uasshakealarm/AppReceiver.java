@@ -45,17 +45,16 @@ public class AppReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         Bundle extras = intent.getExtras();
-        id = extras.getInt("id");
+        this.id = extras.getInt("id");
 
         databaseHelper = new DatabaseHelper(context);
 
-        repeatAlarm(context);
 
         //selama alarm tidak di stop, makan akan terus mengirim notifikasi
         pref = context.getSharedPreferences("shake",MODE_PRIVATE);
 
         Intent alarmIntent = new Intent(context, AppReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE, alarmIntent, 0);
+        pendingIntent = PendingIntent.getBroadcast(context, this.id, alarmIntent, 0);
 
         //set waktu sekarang berdasarkan interval
         cal = Calendar.getInstance();
@@ -81,18 +80,6 @@ public class AppReceiver extends BroadcastReceiver {
         sendNotification(context, intent);
     }
 
-    private void repeatAlarm(Context context) {
-        ModelAlarm modelAlarm = databaseHelper.getDataById(id);
-        Intent alarmIntent = new Intent(context, AppReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(context, id, alarmIntent, 0);
-        cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, modelAlarm.getJam());
-        cal.set(Calendar.MINUTE, modelAlarm.getMenit());
-        cal.set(Calendar.SECOND, 0);
-        AlarmManager Repeat = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Repeat.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
-        playmusic(context);
-    }
 
     public void updateSharedPreferences() {
         SharedPreferences.Editor editor = pref.edit();
@@ -118,7 +105,7 @@ public class AppReceiver extends BroadcastReceiver {
     private void sendNotification(Context context, Intent intent) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd MM yyyy HH:mm:ss");
         String datetimex = sdf.format(new Date());
-        String notif_title = "Coba AlarmManager Notif"+id;
+        String notif_title = "Coba AlarmManager Notif"+this.id;
         String notif_content = "Notif time "+datetimex;
 
         alarmNotificationManager = (NotificationManager) context
@@ -126,6 +113,7 @@ public class AppReceiver extends BroadcastReceiver {
 
         Intent newIntent = new Intent(context,  ShakeActivity.class);
         newIntent.putExtra("notifkey", "notifvalue");
+        newIntent.putExtra("id", this.id);
 
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
                 newIntent, PendingIntent.FLAG_UPDATE_CURRENT);

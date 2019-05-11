@@ -21,8 +21,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.uasshakealarm.AppReceiver;
+import com.example.uasshakealarm.DatabaseHelper;
+import com.example.uasshakealarm.ModelAlarm;
 import com.example.uasshakealarm.R;
 
+import java.util.Calendar;
 
 
 public class ShakeActivity extends AppCompatActivity implements SensorEventListener {
@@ -43,6 +46,10 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
     SharedPreferences prf;
 
     ProgressBar progressBar;
+    DatabaseHelper databaseHelper;
+    Calendar cal;
+    Intent intent;
+    int id  = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +60,14 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shake);
 
+    txt1 = (TextView)findViewById(R.id.id);
 
+        Bundle extras = getIntent().getExtras();
+        this.id = extras.getInt("id");
+        txt1.setText(""+this.id);
 
+        databaseHelper = new DatabaseHelper(this);
+        cal = Calendar.getInstance();
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         lastUpdate = System.currentTimeMillis();
@@ -101,6 +114,7 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
 
         //jika app ini mempunyai banyak notifikasi bisa di cancelAll()
         //notificationManager.cancelAll();
+        repeatAlarm();
         Toast.makeText(this, "AlarmManager Stopped by User.", Toast.LENGTH_SHORT).show();
         startActivity(intent);
 
@@ -201,7 +215,24 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
         a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(a);
     }
+    private void repeatAlarm( ) {
 
+        ModelAlarm modelAlarm = databaseHelper.getDataById(this.id);
+        Intent alarmIntent = new Intent(ShakeActivity.this, AppReceiver.class);
+        alarmIntent.putExtra("id", this.id);
+        pendingIntent = PendingIntent.getBroadcast(ShakeActivity.this, id, alarmIntent, 0);
+        cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, modelAlarm.getJam());
+        cal.set(Calendar.MINUTE, modelAlarm.getMenit());
+        cal.set(Calendar.SECOND, 0);
+        AlarmManager Repeat = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        if (cal.before(Calendar.getInstance())) {
+            cal.add(Calendar.DATE, 1);
+        }
+        Repeat.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+
+        Toast.makeText(this, "AlarmManager repeated."+id, Toast.LENGTH_SHORT).show();
+    }
 
 
 }

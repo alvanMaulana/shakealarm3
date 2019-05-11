@@ -110,6 +110,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
 
     }
+    public void updateData(int id, int checked){
+        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteStatement stmt = db.compileStatement("UPDATE Alarm SET checked=?"+
+                "WHERE id = ?");
+        stmt.bindLong(1, checked);
+        stmt.bindLong(2, id);
+
+        stmt.execute();
+        stmt.close();
+        db.close();
+
+
+    }
+
 
 
 

@@ -97,8 +97,14 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
                         }
 
                         manager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+                        databaseHelper.updateData(dataList.get(position).getId(),1);
 
-                        Toast.makeText(mContext.getApplicationContext(),"Alarm On " + dataList.get(position).getJam(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext.getApplicationContext(),"Alarm On " + dataList.get(position).getId(),Toast.LENGTH_SHORT).show();
+
+
+
+
+
                     }
                     else {
 
@@ -107,9 +113,10 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
 
                         AlarmManager alarmManager = (AlarmManager)mContext.getSystemService(mContext.ALARM_SERVICE);
                         alarmManager.cancel(pendingIntent);
+                        databaseHelper.updateData(dataList.get(position).getId(),0);
+                        Toast.makeText(mContext.getApplicationContext(),"Alarm OFF " + dataList.get(position).getId(),Toast.LENGTH_SHORT).show();
 
-                        NotificationManager notificationManager = (NotificationManager) mContext.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                        notificationManager.cancel(NOTIFICATION_ID);
+
                     }
                     }
 
