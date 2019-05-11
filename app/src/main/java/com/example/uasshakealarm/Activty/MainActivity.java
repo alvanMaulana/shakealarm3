@@ -30,38 +30,16 @@ import com.example.uasshakealarm.TimePickerFragment;
 
 import java.util.Calendar;
 
-
 public class MainActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener{
     private PendingIntent pendingIntent;
-    private static int ALARM_REQUEST_CODE = 101;
-    //set interval notifikasi 10 detik
-    private int interval_seconds = 10;
-    private int NOTIFICATION_ID = 1;
-    private  int penanda = 0;
-
-
-
-    private SensorManager sensorManager;
-    private boolean color = false;
-    private View view;
-    private long lastUpdate;
-
-    private TextView accelText;
-    SharedPreferences pref;
     Calendar c;
     DatabaseHelper databaseHelper;
-
-
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -69,52 +47,32 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
         c = Calendar.getInstance();
         final TextView abc = (TextView)findViewById(R.id.abc);
 
-
-
-
         final Intent toLihat = new Intent(MainActivity.this,LihatAlarm.class);
-        Intent alarmIntent = new Intent(MainActivity.this, AppReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(MainActivity.this, ALARM_REQUEST_CODE, alarmIntent, 0);
 
         Button buttonTimePicker = findViewById(R.id.buttonStart);
         buttonTimePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 DialogFragment timePicker = new TimePickerFragment();
                 timePicker.show(getSupportFragmentManager(), "time picker");
-                //kkkk
-
-
-
             }
         });
-
 
         Button btnSave = (Button)findViewById(R.id.buttonSave);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 insertToSqlLite();
-
-
-                   int a = getID();
-                   ALARM_REQUEST_CODE = a;
-                   startAlarmManager(c);
-                   startActivity(toLihat);
-
-
+                startAlarmManager(c);
+                startActivity(toLihat);
             }
         });
-
 
         Button back = (Button)findViewById(R.id.buttonBack);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 startActivity(toLihat);
-
             }
         });
     }
@@ -124,21 +82,17 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
         return databaseHelper.getID();
     }
 
-
     @Override
     public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-
-
         this.c.set(Calendar.HOUR_OF_DAY, hourOfDay);
         this.c.set(Calendar.MINUTE, minute);
         this.c.set(Calendar.SECOND, 0);
-
-
-
     }
 
     public void startAlarmManager(Calendar c ) {
-
+        int a = getID();
+        Intent alarmIntent = new Intent(MainActivity.this, AppReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(MainActivity.this, a, alarmIntent, 0);
         //set waktu sekarang berdasarkan interval
 
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
@@ -150,9 +104,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
 
         manager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
 
-
         Toast.makeText(this, "AlarmManager Start.", Toast.LENGTH_SHORT).show();
-
     }
 
     private void insertToSqlLite() {
@@ -168,10 +120,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
 
         databaseHelper.insertData(alarm);
 
-        Toast.makeText(this, " Alarm disimpan.", Toast.LENGTH_SHORT).show();
-
+        Toast.makeText(this, " Alarm telah disimpan.", Toast.LENGTH_SHORT).show();
     }
-
-
 }
 

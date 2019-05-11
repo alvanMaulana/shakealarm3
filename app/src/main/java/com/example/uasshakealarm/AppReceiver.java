@@ -21,8 +21,6 @@ import java.util.Date;
 
 import static android.content.Context.MODE_PRIVATE;
 
-
-
 public class AppReceiver extends BroadcastReceiver {
 
     private PendingIntent pendingIntent;
@@ -37,12 +35,9 @@ public class AppReceiver extends BroadcastReceiver {
     SharedPreferences pref;
     String harusgoyang ="apake";
 
-
     @Override
     public void onReceive(Context context, Intent intent) {
-
         //selama alarm tidak di stop, makan akan terus mengirim notifikasi
-
         pref = context.getSharedPreferences("shake",MODE_PRIVATE);
 
         Intent alarmIntent = new Intent(context, AppReceiver.class);
@@ -54,42 +49,22 @@ public class AppReceiver extends BroadcastReceiver {
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         //set alarm manager dengan memasukkan waktu yang telah dikonversi menjadi milliseconds
 
-
-
-
         if (android.os.Build.VERSION.SDK_INT >= 23) {
+//            manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
+//                    AlarmManager.INTERVAL_DAY, pendingIntent);
             manager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
             playmusic(context);
-
-
-
 
         } else if (android.os.Build.VERSION.SDK_INT >= 19) {
             manager.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
             playmusic(context);
 
-
-
-
-
         } else {
             manager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
             playmusic(context);
-
-
-
         }
-
-        //membuat halaman harus digoyang
-
-
-
-
-
         //kirim notifikasi
         sendNotification(context, intent);
-
-
     }
 
     public void updateSharedPreferences() {
@@ -99,12 +74,8 @@ public class AppReceiver extends BroadcastReceiver {
     }
 
     private void playmusic(Context context) {
-
-
         int a ;
         for  (a=0; a<1; a++) {
-
-
             try {
                 player = MediaPlayer.create(context, R.raw.alarm);
                 player.start();
@@ -118,14 +89,10 @@ public class AppReceiver extends BroadcastReceiver {
 
     //handle notification
     private void sendNotification(Context context, Intent intent) {
-
-
         SimpleDateFormat sdf = new SimpleDateFormat("dd MM yyyy HH:mm:ss");
         String datetimex = sdf.format(new Date());
         String notif_title = "Coba AlarmManager Notif";
         String notif_content = "Notif time "+datetimex;
-
-
 
         alarmNotificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
@@ -154,6 +121,7 @@ public class AppReceiver extends BroadcastReceiver {
         alamNotificationBuilder.setContentText(notif_content);
         alamNotificationBuilder.setAutoCancel(true);
         alamNotificationBuilder.setContentIntent(contentIntent);
+
         //Tampilkan notifikasi
         alarmNotificationManager.notify(NOTIFICATION_ID, alamNotificationBuilder.build());
         updateSharedPreferences();
