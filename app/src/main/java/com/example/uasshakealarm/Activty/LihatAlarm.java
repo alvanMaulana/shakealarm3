@@ -17,8 +17,11 @@ import com.example.uasshakealarm.R;
 
 import java.util.ArrayList;
 
+
+
 public class LihatAlarm extends AppCompatActivity {
     SharedPreferences pref;
+
     private RecyclerView recyclerView;
     private AlarmAdapter adapter;
     public static ArrayList<ModelAlarm> alarmArrayList = new ArrayList<ModelAlarm>();
@@ -28,9 +31,13 @@ public class LihatAlarm extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lihat_alarm);
+
+
         checkGoyang();
 
+
         databaseHelper =  new DatabaseHelper(this);
+
 
         recyclerView = (RecyclerView)findViewById(R.id.recycler_view);
         alarmArrayList.clear();
@@ -45,6 +52,7 @@ public class LihatAlarm extends AppCompatActivity {
 
         recyclerView.setAdapter(adapter);
 
+
         FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -54,11 +62,19 @@ public class LihatAlarm extends AppCompatActivity {
                 startActivity(toMain);
             }
         });
+
+
     }
 
     private void checkGoyang() {
+
         pref = getSharedPreferences("shake",MODE_PRIVATE);
+
         Intent toShake = new Intent(LihatAlarm.this,ShakeActivity.class);
+
+
+
+
         if(pref.contains("HarusGoyang")) {
             startActivity(toShake);
         }

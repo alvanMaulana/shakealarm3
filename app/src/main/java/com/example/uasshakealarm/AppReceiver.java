@@ -36,6 +36,9 @@ public class AppReceiver extends BroadcastReceiver {
     SharedPreferences pref;
     String harusgoyang ="apake";
 
+    DatabaseHelper databaseHelper;
+    Calendar cal;
+
     int id;
 
     @Override
@@ -44,6 +47,10 @@ public class AppReceiver extends BroadcastReceiver {
         Bundle extras = intent.getExtras();
         id = extras.getInt("id");
 
+        databaseHelper = new DatabaseHelper(context);
+
+        repeatAlarm(context);
+
         //selama alarm tidak di stop, makan akan terus mengirim notifikasi
         pref = context.getSharedPreferences("shake",MODE_PRIVATE);
 
@@ -51,7 +58,7 @@ public class AppReceiver extends BroadcastReceiver {
         pendingIntent = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE, alarmIntent, 0);
 
         //set waktu sekarang berdasarkan interval
-        Calendar cal = Calendar.getInstance();
+        cal = Calendar.getInstance();
         cal.add(Calendar.SECOND, interval_seconds);
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         //set alarm manager dengan memasukkan waktu yang telah dikonversi menjadi milliseconds
@@ -72,6 +79,19 @@ public class AppReceiver extends BroadcastReceiver {
         }
         //kirim notifikasi
         sendNotification(context, intent);
+    }
+
+    private void repeatAlarm(Context context) {
+        ModelAlarm modelAlarm = databaseHelper.getDataById(id);
+        Intent alarmIntent = new Intent(context, AppReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(context, id, alarmIntent, 0);
+        cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, modelAlarm.getJam());
+        cal.set(Calendar.MINUTE, modelAlarm.getMenit());
+        cal.set(Calendar.SECOND, 0);
+        AlarmManager Repeat = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Repeat.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+        playmusic(context);
     }
 
     public void updateSharedPreferences() {
