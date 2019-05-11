@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
 
         databaseHelper.insertData(alarm);
 
-        Toast.makeText(this, " Alarm disimpan.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, " Alarm telah disimpan.", Toast.LENGTH_SHORT).show();
     }
 }
 
