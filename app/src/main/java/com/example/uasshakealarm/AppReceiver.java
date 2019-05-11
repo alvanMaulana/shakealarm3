@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
+import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
 
@@ -35,8 +36,14 @@ public class AppReceiver extends BroadcastReceiver {
     SharedPreferences pref;
     String harusgoyang ="apake";
 
+    int id;
+
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        Bundle extras = intent.getExtras();
+        id = extras.getInt("id");
+
         //selama alarm tidak di stop, makan akan terus mengirim notifikasi
         pref = context.getSharedPreferences("shake",MODE_PRIVATE);
 
@@ -91,7 +98,7 @@ public class AppReceiver extends BroadcastReceiver {
     private void sendNotification(Context context, Intent intent) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd MM yyyy HH:mm:ss");
         String datetimex = sdf.format(new Date());
-        String notif_title = "Coba AlarmManager Notif";
+        String notif_title = "Coba AlarmManager Notif"+id;
         String notif_content = "Notif time "+datetimex;
 
         alarmNotificationManager = (NotificationManager) context

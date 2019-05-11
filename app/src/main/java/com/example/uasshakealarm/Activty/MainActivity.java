@@ -90,7 +90,10 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
     public void startAlarmManager(Calendar c ) {
         int a = getID();
         Intent alarmIntent = new Intent(MainActivity.this, AppReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(MainActivity.this, a, alarmIntent, 0);
+        alarmIntent.putExtra("id", getID());
+        pendingIntent = PendingIntent.getBroadcast(MainActivity.this, a, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
         //set waktu sekarang berdasarkan interval
 
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
