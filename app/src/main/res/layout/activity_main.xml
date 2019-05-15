@@ -6,57 +6,188 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activty.MainActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+   >
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
 
     <TextView
-        android:visibility="gone"
-        android:id="@+id/abc"
-        android:paddingTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="ID"
-        android:textAlignment="center"
-        android:textSize="24sp" />
+        android:textColor="@color/colorPrimaryDark"
+            android:id="@+id/jam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00"
+            android:textSize="70dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="30dp"/>
 
-
+    <View
+        android:id="@+id/view1"
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorAccent2" />
     <LinearLayout
-        android:paddingTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        >
-        <Button
-            android:id="@+id/buttonStart"
+        android:layout_margin="15dp">
+        <TextView
+            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Atur Waktu" />
+            android:text="masukan Nama Alarm"/>
 
+    <EditText
+        android:id="@+id/nama"
+        android:text="Shake it Alarm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:backgroundTint="@color/colorAccent3"/>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorAccent2" />
+
+    <LinearLayout
+        android:paddingTop="20dp"
+        android:layout_margin="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="right">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Tingkat Kesulitan                   "/>
+
+
+        <RadioGroup
+            android:id="@+id/kesulitan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RadioButton
+
+                style="@style/radio_button_transport"
+                android:text="E"
+                android:gravity="center"
+                android:textColor="@drawable/textcolorkesulitan"
+                android:layout_height="40dp"
+                android:layout_width="40dp"
+                android:background="@drawable/kesulitan_btn"/>
+
+            <Space
+                style="@style/radio_button_spacer" />
+
+            <RadioButton
+                style="@style/radio_button_transport"
+                android:id="@+id/M"
+                android:text="M"
+                android:gravity="center"
+                android:textColor="@drawable/textcolorkesulitan"
+                android:layout_height="40dp"
+                android:layout_width="40dp"
+                android:background="@drawable/kesulitan_btn"/>
+
+            <Space
+                style="@style/radio_button_spacer" />
+
+            <RadioButton
+                style="@style/radio_button_transport"
+                android:text="H"
+                android:gravity="center"
+                android:textColor="@drawable/textcolorkesulitan"
+                android:layout_height="40dp"
+                android:layout_width="40dp"
+                android:background="@drawable/kesulitan_btn"/>
+        </RadioGroup>
 
 
     </LinearLayout>
+    <View
+        android:id="@+id/view3"
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorAccent2" />
+
     <LinearLayout
-        android:layout_margin="20dp"
-        android:layout_gravity="bottom|end"
-        android:layout_width="wrap_content"
+        android:paddingTop="30dp"
+        android:layout_margin="15dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="bottom"
+        android:gravity="right">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Pilih Nada Dering                   "/>
 
-        >
+
+        <Spinner
+            android:id="@+id/nadaDering"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/nadadering"
+            android:prompt="@string/nadadering_prompt"
+            />
+
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view4"
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorAccent2" />
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_margin="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="right">
+
+
 
         <Button
+            android:background="@color/colorAccent3"
+            android:textColor="@color/colorAccent2"
             android:id="@+id/buttonBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Kembali" />
+            android:text="Kembali"
+            android:layout_marginRight="4dp"/>
 
         <Button
+            android:background="@color/colorPrimary"
+            android:textColor="#ffffff"
             android:id="@+id/buttonSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Save"
             />
-
     </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

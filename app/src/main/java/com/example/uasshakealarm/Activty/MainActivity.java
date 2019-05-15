@@ -10,11 +10,16 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -30,10 +35,17 @@ import com.example.uasshakealarm.TimePickerFragment;
 
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener{
+public class MainActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, RadioGroup.OnCheckedChangeListener{
     private PendingIntent pendingIntent;
     Calendar c;
     DatabaseHelper databaseHelper;
+    TextView txtJam;
+    EditText nama;
+    RadioButton nilaiAwal;
+    RadioGroup kesulitan;
+    Spinner nadadering;
+     String RadioGroup;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,19 +56,38 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        txtJam = (TextView)findViewById(R.id.jam);
+        nama = (EditText)findViewById(R.id.nama);
+        kesulitan = (RadioGroup)findViewById(R.id.kesulitan);
+        nilaiAwal = (RadioButton)findViewById(R.id.M);
+        nilaiAwal.setChecked(true);
+        RadioGroup = "M";
+        //menentukan nilai awal , 2 karena ada space di xml
+        kesulitan.setOnCheckedChangeListener(this);
+        nadadering = (Spinner)findViewById(R.id.nadaDering);
+
+
+
+
+
+
+
         c = Calendar.getInstance();
-        final TextView abc = (TextView)findViewById(R.id.abc);
+        txtJam.setText(""+c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE));
+
+
 
         final Intent toLihat = new Intent(MainActivity.this,LihatAlarm.class);
 
-        Button buttonTimePicker = findViewById(R.id.buttonStart);
-        buttonTimePicker.setOnClickListener(new View.OnClickListener() {
+
+        txtJam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DialogFragment timePicker = new TimePickerFragment();
                 timePicker.show(getSupportFragmentManager(), "time picker");
             }
         });
+
 
         Button btnSave = (Button)findViewById(R.id.buttonSave);
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -87,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
         this.c.set(Calendar.HOUR_OF_DAY, hourOfDay);
         this.c.set(Calendar.MINUTE, minute);
         this.c.set(Calendar.SECOND, 0);
+        txtJam.setText(""+c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE));
     }
 
     public void startAlarmManager(Calendar c ) {
@@ -112,18 +144,33 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
 
     private void insertToSqlLite() {
         databaseHelper = new DatabaseHelper(this);
+        String nama = this.nama.getText().toString().trim();
+        String Kesulitan = RadioGroup;
+        String nadadering = this.nadadering.getSelectedItem().toString();
         int jam = (c.get(Calendar.HOUR_OF_DAY));
         int menit = (c.get(Calendar.MINUTE));
         int checked = 1;
+
         ModelAlarm alarm = new ModelAlarm();
 
         alarm.setJam(jam);
         alarm.setMenit(menit);
         alarm.setChecked(checked);
+        alarm.setNama(nama);
+        alarm.setKesulitan(Kesulitan);
+        alarm.setNadadering(nadadering);
 
         databaseHelper.insertData(alarm);
 
-        Toast.makeText(this, " Alarm telah disimpan.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, " Alarm telah disimpan."+ nama + Kesulitan + nadadering, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup radioGroup, int i) {
+        int radioButtonId = radioGroup.getCheckedRadioButtonId();
+        RadioButton radioButton = (RadioButton)radioGroup.findViewById(radioButtonId);
+        RadioGroup = radioButton.getText().toString();
+
     }
 }
 

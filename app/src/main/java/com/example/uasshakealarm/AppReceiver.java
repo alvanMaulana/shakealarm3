@@ -16,6 +16,7 @@ import android.support.v4.app.NotificationCompat;
 
 import com.example.uasshakealarm.Activty.ShakeActivity;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -27,38 +28,56 @@ public class AppReceiver extends BroadcastReceiver {
     private PendingIntent pendingIntent;
     private static final int ALARM_REQUEST_CODE = 134;
     //set interval notifikasi 10 detik
-    private int interval_seconds = 2;
+    private int interval_seconds = 2000;
     private NotificationManager alarmNotificationManager;
     String NOTIFICATION_CHANNEL_ID = "rasupe_channel_id";
     String NOTIFICATION_CHANNEL_NAME = "rasupe channel";
     private int NOTIFICATION_ID = 1;
-    MediaPlayer player;
+    static MediaPlayer player;
     SharedPreferences pref;
     String harusgoyang ="apake";
 
     DatabaseHelper databaseHelper;
     Calendar cal;
-
-    int id;
+    String Nama,Kesulitan,NadaDering;
+    int id,duration;
 
     @Override
     public void onReceive(Context context, Intent intent) {
 
         Bundle extras = intent.getExtras();
         this.id = extras.getInt("id");
+        pref = context.getSharedPreferences("shake",MODE_PRIVATE);
 
-        databaseHelper = new DatabaseHelper(context);
+
+        if(!pref.contains("HarusGoyang")){
+
+            databaseHelper = new DatabaseHelper(context);
+            ModelAlarm modelAlarm = databaseHelper.getDataById(this.id);
+            Nama = modelAlarm.getNama();
+            NadaDering = modelAlarm.getNadadering();
+            updateSharedPreferences();
+            Intent keShake = new Intent(context,ShakeActivity.class);
+            keShake.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(keShake);
+        }
+
+
+
 
 
         //selama alarm tidak di stop, makan akan terus mengirim notifikasi
-        pref = context.getSharedPreferences("shake",MODE_PRIVATE);
+
 
         Intent alarmIntent = new Intent(context, AppReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(context, this.id, alarmIntent, 0);
+        pendingIntent = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE, alarmIntent, 0);
+
+
+        playmusic(context);
 
         //set waktu sekarang berdasarkan interval
         cal = Calendar.getInstance();
-        cal.add(Calendar.SECOND, interval_seconds);
+        cal.add(Calendar.MILLISECOND, interval_seconds);
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         //set alarm manager dengan memasukkan waktu yang telah dikonversi menjadi milliseconds
 
@@ -66,17 +85,18 @@ public class AppReceiver extends BroadcastReceiver {
 //            manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
 //                    AlarmManager.INTERVAL_DAY, pendingIntent);
             manager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
-            playmusic(context);
+
 
         } else if (android.os.Build.VERSION.SDK_INT >= 19) {
             manager.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
-            playmusic(context);
+
 
         } else {
             manager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
-            playmusic(context);
+
         }
         //kirim notifikasi
+
         sendNotification(context, intent);
     }
 
@@ -84,28 +104,56 @@ public class AppReceiver extends BroadcastReceiver {
     public void updateSharedPreferences() {
         SharedPreferences.Editor editor = pref.edit();
         editor.putString("HarusGoyang",harusgoyang);
+        editor.putLong("Id_On",this.id);
+        editor.putString("Nama_On", Nama);
+        editor.putString("NadaDering_On",NadaDering);
         editor.commit();
     }
 
     private void playmusic(Context context) {
-        int a ;
-        for  (a=0; a<1; a++) {
-            try {
-                player = MediaPlayer.create(context, R.raw.alarm);
-                player.start();
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
+        String NadaDering = pref.getString("NadaDering_On","null");
+
+        if(NadaDering.equals("asiaaap")){
+            player = MediaPlayer.create(context, R.raw.asiaaap);
 
         }
+        else if(NadaDering.equals("galaxy_s3_original")){
+            player = MediaPlayer.create(context, R.raw.galaxy_s3_original);
+
+        }
+        else{
+            player = MediaPlayer.create(context, R.raw.morning_flower);
+        }
+
+
+                this.duration = player.getDuration();
+                this.interval_seconds = this.duration + 100;
+        player.start();
+
+        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                public void onCompletion(MediaPlayer mp) {
+                mp.release();
+
+            };
+        });
+
+
+
+    }
+    public static void stopMusic(){
+        if(player.isPlaying()){
+        player.stop();
+        }
+
     }
 
     //handle notification
     private void sendNotification(Context context, Intent intent) {
+        String Nama = pref.getString("Nama_On","null");
         SimpleDateFormat sdf = new SimpleDateFormat("dd MM yyyy HH:mm:ss");
         String datetimex = sdf.format(new Date());
-        String notif_title = "Coba AlarmManager Notif"+this.id;
+        String notif_title = ""+Nama;
         String notif_content = "Notif time "+datetimex;
 
         alarmNotificationManager = (NotificationManager) context
@@ -113,7 +161,7 @@ public class AppReceiver extends BroadcastReceiver {
 
         Intent newIntent = new Intent(context,  ShakeActivity.class);
         newIntent.putExtra("notifkey", "notifvalue");
-        newIntent.putExtra("id", this.id);
+
 
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
                 newIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -131,7 +179,7 @@ public class AppReceiver extends BroadcastReceiver {
         //Buat notification
         NotificationCompat.Builder alamNotificationBuilder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID);
         alamNotificationBuilder.setContentTitle(notif_title);
-        alamNotificationBuilder.setSmallIcon(R.mipmap.ic_launcher);
+        alamNotificationBuilder.setSmallIcon(R.mipmap.logoicon);
         alamNotificationBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
         alamNotificationBuilder.setContentText(notif_content);
         alamNotificationBuilder.setAutoCancel(true);
@@ -139,6 +187,6 @@ public class AppReceiver extends BroadcastReceiver {
 
         //Tampilkan notifikasi
         alarmNotificationManager.notify(NOTIFICATION_ID, alamNotificationBuilder.build());
-        updateSharedPreferences();
+
     }
 }

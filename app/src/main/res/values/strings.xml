@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">UasShakeAlarm</string>
+    <string name="nadadering_prompt">Pilih Nada dering</string>
+    <string-array name="nadadering">
+        <item>asiaaap</item>
+        <item>galaxy_s3_original</item>
+        <item>Other...</item>
+    </string-array>
 </resources>

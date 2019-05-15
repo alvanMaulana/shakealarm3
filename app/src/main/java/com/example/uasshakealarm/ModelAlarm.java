@@ -9,6 +9,33 @@ public class ModelAlarm {
 
     int menit;
 
+
+    String nama,nadadering, kesulitan;
+
+    public String getKesulitan() {
+        return kesulitan;
+    }
+
+    public void setKesulitan(String kesulitan) {
+        this.kesulitan = kesulitan;
+    }
+
+    public String getNama() {
+        return nama;
+    }
+
+    public void setNama(String nama) {
+        this.nama = nama;
+    }
+
+    public String getNadadering() {
+        return nadadering;
+    }
+
+    public void setNadadering(String nadadering) {
+        this.nadadering = nadadering;
+    }
+
     public int getId() {
         return id;
     }
